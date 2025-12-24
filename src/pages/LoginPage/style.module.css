@@ -1,0 +1,40 @@
+.LoginPage {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+.LoginPage h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.LoginPage form {
+  display: flex;
+  flex-direction: column;
+}
+.LoginPage label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+.LoginPage input {
+  display: block;
+  margin-bottom: 15px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+.LoginPage input:focus {
+  border-color: #66afe9;
+  outline: none;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+.Button {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
