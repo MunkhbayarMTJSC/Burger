@@ -54,6 +54,15 @@ const Reducer = (state = initialState, action) => {
         error: action.payload,
       },
     };
+  } else if (action.type === "CLEAR_ORDER") {
+    return {
+      ...state,
+      newOrder: {
+        saving: false,
+        finished: false,
+        error: null,
+      },
+    };
   }
   return state;
 };

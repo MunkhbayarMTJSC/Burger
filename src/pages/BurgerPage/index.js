@@ -1,55 +1,41 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Burger from "../../components/Burger";
 import BuildControls from "../../components/BuildControls";
 import Modal from "../../components/General/Modal";
 import OrderSummery from "../../components/OrderSummery";
 import { Navigate } from "react-router-dom";
-import { connect } from "react-redux";
 
-class BurgerBuilder extends Component {
-  state = {
-    comfirming: false,
-    redirect: false,
-  };
-  continueOrder = () => {
-    this.setState({ redirect: true });
-    this.hideComfirmModal();
+const BurgerBuilder = (props) => {
+  const [confirming, setConfirming] = useState(false);
+  const [redirect, setRedirect] = useState(false);
+  const continueOrder = () => {
+    setRedirect(true);
+    hideComfirmModal();
   };
 
-  showComfirmModal = () => {
-    this.setState({ comfirming: true });
+  const showComfirmModal = () => {
+    setConfirming(true);
   };
-  hideComfirmModal = () => {
-    this.setState({ comfirming: false });
+  const hideComfirmModal = () => {
+    setConfirming(false);
   };
 
-  render() {
-    if (this.state.redirect) {
-      return <Navigate to="/shipping" />;
-    }
-
-    return (
-      <div>
-        <Modal show={this.state.comfirming} clearShadow={this.hideComfirmModal}>
-          <OrderSummery
-            onCancel={this.hideComfirmModal}
-            onConfirm={this.continueOrder}
-          />
-        </Modal>
-
-        <Burger />
-        <BuildControls
-          showComfirmModal={this.showComfirmModal}
-          hideComfirmModal={this.hideComfirmModal}
-        />
-      </div>
-    );
+  if (redirect) {
+    return <Navigate to="/shipping" />;
   }
-}
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
-  };
+
+  return (
+    <div>
+      <Modal show={confirming} clearShadow={hideComfirmModal}>
+        <OrderSummery onCancel={hideComfirmModal} onConfirm={continueOrder} />
+      </Modal>
+
+      <Burger />
+      <BuildControls
+        showComfirmModal={showComfirmModal}
+        hideComfirmModal={hideComfirmModal}
+      />
+    </div>
+  );
 };
-export default connect(mapStateToProps)(BurgerBuilder);
+export default BurgerBuilder;

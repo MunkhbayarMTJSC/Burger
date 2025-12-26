@@ -16,6 +16,11 @@ export const loadOrders = (userId) => {
       });
   };
 };
+export const clearOrder = () => {
+  return {
+    type: "CLEAR_ORDER",
+  };
+};
 
 export const loadOrdersStart = () => {
   return {

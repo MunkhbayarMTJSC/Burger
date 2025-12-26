@@ -58,7 +58,11 @@ const ContactInfo = (props) => {
     if (props.newOrderStatus.finished) {
       navigate("/history", { replace: true });
     }
-  });
+    return () => {
+      // Цэвэрлэгч функц
+      props.clearOrder();
+    };
+  }, [props.newOrderStatus.finished]);
 
   return (
     <div className={styles.ContactInfo}>
@@ -127,6 +131,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     saveOrder: (orderData) => dispatch(action.saveOrder(orderData)),
+    clearOrder: () => dispatch(action.clearOrder()),
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);

@@ -44,6 +44,8 @@ const Reducer = (state = initialState, action) => {
       totalPrice: newPrice,
       purchasable: newPrice > 1000,
     };
+  } else if (action.type === "CLEAR_ORDER") {
+    return initialState;
   }
   return state;
 };
