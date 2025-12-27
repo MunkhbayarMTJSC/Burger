@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Navigate } from "react-router-dom";
 import styles from "./style.module.css";
@@ -12,32 +12,42 @@ const SignupPage = (props) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+
+  const [emailValid, setEmailValid] = useState(null);
+  const [passwordValid, setPasswordValid] = useState(null);
+  const [passwordMatch, setPasswordMatch] = useState(null);
+
+  useEffect(() => {
+    if (!email) {
+      setEmailValid(null);
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setEmailValid(emailRegex.test(email));
+  }, [email]);
+  useEffect(() => {
+    if (!password) {
+      setPasswordValid(null);
+      return;
+    }
+
+    setPasswordValid(password.length >= 6);
+  }, [password]);
+  useEffect(() => {
+    if (!confirmPassword) {
+      setPasswordMatch(null);
+      return;
+    }
+    setPasswordMatch(password === confirmPassword);
+  }, [confirmPassword]);
+
   const signup = () => {
     if (password !== confirmPassword) {
       setError("Нууц үг таарахгүй байна");
       return;
     }
     props.signupUser(email, password);
-  };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    switch (name) {
-      case "name":
-        setName(value);
-        break;
-      case "email":
-        setEmail(value);
-        break;
-      case "password":
-        setPassword(value);
-        break;
-      case "confirmPassword":
-        setConfirmPassword(value);
-        break;
-      default:
-        break;
-    }
   };
 
   if (props.userId) {
@@ -47,34 +57,44 @@ const SignupPage = (props) => {
     <div className={styles.SignupPage}>
       <h2>Signup Page</h2>
       <form onSubmit={(e) => e.preventDefault()}>
-        <input
-          onChange={handleChange}
-          type="text"
-          name="name"
-          placeholder="Name"
-        />
-        <br />
-        <input
-          onChange={handleChange}
-          type="email"
-          name="email"
-          placeholder="Email"
-        />
-        <br />
-        <input
-          onChange={handleChange}
-          type="password"
-          name="password"
-          placeholder="Password"
-        />
-        <br />
-        <input
-          onChange={handleChange}
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-        />
-        <br />
+        <div className={styles.inputGroup}>
+          <input
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            name="name"
+            placeholder="Name"
+          />
+        </div>
+        <div className={styles.inputGroup}>
+          <input
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            name="email"
+            placeholder="Email"
+          />
+          {emailValid === true && <span className={styles.ok}>✔</span>}
+          {emailValid === false && <span className={styles.error}>✖</span>}
+        </div>
+        <div className={styles.inputGroup}>
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            name="password"
+            placeholder="Password"
+          />
+          {passwordValid === true && <span className={styles.ok}>✔</span>}
+          {passwordValid === false && <span className={styles.error}>✖</span>}
+        </div>
+        <div className={styles.inputGroup}>
+          <input
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+          />
+          {passwordMatch === true && <span className={styles.ok}>✔</span>}
+          {passwordMatch === false && <span className={styles.error}>✖</span>}
+        </div>
         {error && <p style={{ color: "red" }}>{error}</p>}
         {props.error && (
           <p style={{ color: "red" }}>

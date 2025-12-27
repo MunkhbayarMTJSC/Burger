@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import * as actions from "../../redux/actions/burgerActions";
 import styles from "./style.module.css";
 import BuildControl from "../BuildControl";
 
@@ -45,11 +44,5 @@ const mapStateToProps = (state) => {
     totalPrice: state.burger.totalPrice,
   };
 };
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addIngredient: (type) => dispatch(actions.addIngredient(type)),
-    substractIngredient: (type) => dispatch(actions.substractIngredient(type)),
-  };
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(BuildControls);
+export default connect(mapStateToProps)(BuildControls);

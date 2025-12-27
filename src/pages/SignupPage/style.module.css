@@ -38,3 +38,24 @@
   border-radius: 5px;
   cursor: pointer;
 }
+
+.inputGroup {
+  position: relative;
+  width: 100%;
+}
+
+.ok {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: green;
+}
+
+.error {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+}

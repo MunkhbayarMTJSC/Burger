@@ -4,6 +4,7 @@ import styles from "./style.module.css";
 const Button = (props) => {
   return (
     <button
+      type="button"
       className={`${styles.Button} ${styles[props.btnType]}`}
       onClick={props.clicked}
     >

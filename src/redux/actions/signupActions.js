@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const signupUser = (name, email, password) => {
+export const signupUser = (email, password) => {
   return function (dispatch) {
     dispatch(signupUserStart());
     // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[AIzaSyAC0Cvu2WaQCNrHSl5V52XxwZO72vFilGc]
