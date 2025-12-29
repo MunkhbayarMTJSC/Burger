@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import styles from "./style.module.css";
 import Button from "../../components/General/Button";
-import * as action from "../../redux/actions/signupActions";
 import Spinner from "../../components/General/Spinner";
+import UserContext from "../../context/UserContext";
 
 const SignupPage = (props) => {
+  const ctx = useContext(UserContext);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,10 +48,10 @@ const SignupPage = (props) => {
       setError("Нууц үг таарахгүй байна");
       return;
     }
-    props.signupUser(email, password);
+    ctx.signupUser(email, password);
   };
 
-  if (props.userId) {
+  if (ctx.state.userId) {
     return <Navigate to={"/history"} replace />;
   }
   return (
@@ -96,28 +97,15 @@ const SignupPage = (props) => {
           {passwordMatch === false && <span className={styles.error}>✖</span>}
         </div>
         {error && <p style={{ color: "red" }}>{error}</p>}
-        {props.error && (
+        {ctx.state.error && (
           <p style={{ color: "red" }}>
-            {props.error.response.data.error.message}
+            {ctx.state.error.response.data.error.message}
           </p>
         )}
-        {props.saving && <Spinner />}
+        {ctx.state.saving && <Spinner />}
         <Button btnType="Success" text="SIGNUP" clicked={signup} />
       </form>
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    saving: state.userAuth.saving,
-    error: state.userAuth.firebaseError,
-    userId: state.userAuth.userId,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signupUser: (email, password) =>
-      dispatch(action.signupUser(email, password)),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(SignupPage);
+export default SignupPage;

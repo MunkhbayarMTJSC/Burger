@@ -1,24 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import styles from "./style.module.css";
 import Button from "../General/Button";
-import { connect } from "react-redux";
+import BurgerContext from "../../context/BurgerContext";
 const OrderSummery = (props) => {
-  console.log(
-    Object.keys(props.ingredients).map((el) => props.ingredientNames[el])
-  );
+  const burgerContext = useContext(BurgerContext);
   return (
     <div className={styles.OrderSummery}>
       <h3>Таны захиалгын дэлгэрэнгүй</h3>
       <p>Орц:</p>
       <ul>
-        {Object.keys(props.ingredients).map((el) => (
+        {Object.keys(burgerContext.burger.ingredients).map((el) => (
           <li key={el}>
-            <span>{props.ingredientNames[el]}</span>: {props.ingredients[el]}
+            <span>{burgerContext.burger.ingredientNames[el]}</span>:{" "}
+            {burgerContext.burger.ingredients[el]}
           </li>
         ))}
       </ul>
       <p>
-        <strong>Нийт үнэ: {props.totalPrice}₮</strong>
+        <strong>Нийт үнэ: {burgerContext.burger.totalPrice}₮</strong>
       </p>
       <p>Үргэлжлүүлэх үү?</p>
       <Button btnType="Danger" text="ТАТГАЛЗАХ" clicked={props.onCancel} />
@@ -27,12 +26,4 @@ const OrderSummery = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.burger.ingredients,
-    totalPrice: state.burger.totalPrice,
-    ingredientNames: state.burger.ingredientNames,
-  };
-};
-
-export default connect(mapStateToProps)(OrderSummery);
+export default OrderSummery;

@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React, { useState, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import styles from "./style.module.css";
 import Button from "../../components/General/Button";
-import * as action from "../../redux/actions/loginAction";
 import Spinner from "../../components/General/Spinner";
+import UserContext from "../../context/UserContext";
 
 const LoginPage = (props) => {
+  const ctx = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const login = () => {
-    props.loginUser(email, password);
+    ctx.loginUser(email, password);
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,7 +25,7 @@ const LoginPage = (props) => {
         break;
     }
   };
-  if (props.userId) {
+  if (ctx.state.userId) {
     return <Navigate to={"/history"} replace />;
   }
   return (
@@ -46,29 +46,15 @@ const LoginPage = (props) => {
           placeholder="Password"
         />
         <br />
-        {props.error && (
+        {ctx.state.error && (
           <p style={{ color: "red" }}>
-            {props.error.response.data.error.message}
+            {ctx.state.error.response.data.error.message}
           </p>
         )}
-        {props.saving && <Spinner />}
+        {ctx.state.saving && <Spinner />}
         <Button btnType="Success" text="LOGIN" clicked={login} />
       </form>
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    loading: state.userAuth.loading,
-    error: state.userAuth.firebaseError,
-    userId: state.userAuth.userId,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loginUser: (email, password) => {
-      dispatch(action.loginUser(email, password));
-    },
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default LoginPage;

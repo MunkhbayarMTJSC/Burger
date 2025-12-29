@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./style.module.css";
 import Button from "../General/Button";
 import Spinner from "../General/Spinner";
-import * as action from "../../redux/actions/orderActions";
+import BurgerContext from "../../context/BurgerContext";
+import UserContext from "../../context/UserContext";
 
 const ContactInfo = (props) => {
   const navigate = useNavigate();
+  const burgerContext = useContext(BurgerContext);
+  const userCtx = useContext(UserContext);
   const [state, setState] = useState({
     customer: {
       address: {
@@ -17,9 +19,9 @@ const ContactInfo = (props) => {
       },
       name: "",
     },
-    ingredients: props.ingredients,
-    price: props.totalPrice,
-    userId: props.userId,
+    ingredients: burgerContext.burger.ingredients,
+    price: burgerContext.burger.totalPrice,
+    userId: userCtx.state.userId,
   });
 
   const handleChange = (e) => {
@@ -52,17 +54,17 @@ const ContactInfo = (props) => {
       customer: state.customer,
       userId: state.userId,
     };
-    props.saveOrder(orderData);
+    burgerContext.saveBurgerToServer(userCtx.state.token, orderData);
   };
   useEffect(() => {
-    if (props.newOrderStatus.finished) {
+    if (burgerContext.burger.finished) {
       navigate("/history", { replace: true });
     }
     return () => {
       // Цэвэрлэгч функц
-      props.clearOrder();
+      burgerContext.clearBurger();
     };
-  }, [props.newOrderStatus.finished]);
+  }, [burgerContext.burger.finished]);
 
   return (
     <div className={styles.ContactInfo}>
@@ -71,10 +73,10 @@ const ContactInfo = (props) => {
         Захиалгын үнэ: <strong>{state.price}₮</strong>
       </p>
       <div>
-        {props.newOrderStatus.error && "Алдаа гарлаа. Дахин оролдоно уу."}
+        {burgerContext.burger.error && "Алдаа гарлаа. Дахин оролдоно уу."}
       </div>
       <br />
-      {props.newOrderStatus.saving ? (
+      {burgerContext.burger.saving ? (
         <Spinner />
       ) : (
         <form onSubmit={(e) => e.preventDefault()}>
@@ -120,18 +122,4 @@ const ContactInfo = (props) => {
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.burger.ingredients,
-    totalPrice: state.burger.totalPrice,
-    newOrderStatus: state.order.newOrder,
-    userId: state.userAuth.userId,
-  };
-};
-const mapDispatchToProps = (dispatch) => {
-  return {
-    saveOrder: (orderData) => dispatch(action.saveOrder(orderData)),
-    clearOrder: () => dispatch(action.clearOrder()),
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(ContactInfo);
+export default ContactInfo;

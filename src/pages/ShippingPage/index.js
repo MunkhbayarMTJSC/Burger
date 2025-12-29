@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import styles from "./style.module.css";
 import Burger from "../../components/Burger";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -29,11 +28,5 @@ const ShippingPage = (props) => {
     </div>
   );
 };
-const mapStateToProps = (state) => {
-  return {
-    ingredients: state.ingredients,
-    totalPrice: state.totalPrice,
-  };
-};
 
-export default connect(mapStateToProps)(ShippingPage);
+export default ShippingPage;
